@@ -1,0 +1,16 @@
+Voici les démarches pour pouvoir utiliser un site web local avec une base de données (DynamoDB) locale.
+
+1. Il faut pouvoir lancer le site web localement, pour cela :
+    - télécharger XAMPP  (https://www.apachefriends.org/fr/index.html).
+    - lancer XAMPP et cliquer sur le bouton "Start" de la 1ère ligne qui correspond au module "Apache".
+2. Il faut pouvoir utiliser une dynamoDB locale, pour cela :
+    - suivez les étapes de ce tuto : http://docs.aws.amazon.com/fr_fr/amazondynamodb/latest/developerguide/Tools.DynamoDBLocal.html
+    (télécharger le fichier qui vous est indiqué et lancer la ligne de commande qui vous est indiqué via "invite de commandes").
+    Vous pourrez construire votre base de données via : http://localhost:8000/shell/ en suivant le tuto qui vous est présenté. Attention si voous n'êtes pas sur le port 8000, remplacer 8000 par le numéro de votre prt dans le lien.
+    
+Le dossier permet de lancer le site web avec une base de données DynamoDB locale.
+Il suffit de créer une table "Users" avec pour clef primaire : email (string).
+Une table "Contents" avec pour clef primaire : name (string), owner (string).
+Et une table "cherry-shared-content" avec pour clef primaire name (string), path (string).
+
+Le code contenu dans ce dossier permettra de créer les autres tables (comme par ex : "client").

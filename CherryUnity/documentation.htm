@@ -1,0 +1,838 @@
+﻿<head><meta http-equiv="content-type" content="text/html; charset=utf-8" /><Title>Documentation</title></head>
+<body style="width:80%;padding:2;">
+Version 2011_02_12(12 f&eacute;vrier 2011)
+<br><br>
+Cette page détaille les outils utilisés pour créer Genesis.
+Je cherchais un système à la fois rapide à taper (pas de balises interminables), facile à interpréter par le php et surtout lisible dans un simple éditeur texte (je vous conseille d'ailleurs Notepad++ pour éditer vos cerveaux).
+<br>
+<center><br><br>
+<a href="#pres">Présentation rapide</a><br>
+<a href="#install">Installation</a><br>
+<a href="#outils">Les outils de base</a><br>
+<a href="#logs">Logs, variables et conditions</a><br>
+<a href="#fonc">Liste des fonctions</a><br>
+</center><br><br>
+<hr>
+<A NAME="pres"></a>
+<u><span style='font-size:24.0pt'>Présentation rapide</span></u><br>
+Genesis est un chatterbot de type action/réaction.<br>
+Je veux dire par là qu'il n'apprend pas, ne maitrise pas la grammaire et il ne comprend rien à ce qu'il reçoit ni à ce qu'il raconte.
+Il se contente de répondre quelque chose de pré-enregistré s'il reçoit un certain stimulus. Ce n'est pas une intelligence artificielle.
+<br><br>
+Mon système de création de chatterbot se compose de plusieurs parties, traités les unes après les autre.<br>
+<br><br>
+<DIV style="padding:2;width:80%;border-width:thin;border-style:solid"><b>1) Le fichier chatterbot23.php</b><br><br>
+C'est ce programme qui va <b>recevoir la phrase de l'utilisateur, puis répondre</b>, en piochant des informations dans les autres fichiers, en les lisant ligne par ligne de haut en bas.
+</div>
+<div style="padding-left:40%"><big><big>↓↓</big></big><br></div>
+<DIV style="padding:2;width:80%;border-width:thin;border-style:solid"><b>2) Le fichier correction.txt</b><br><br>
+Une fois la phrase reçue, chatterbot23.php va <b>corriger les fautes éventuelles de l'utilisateur</b> avec ce fichier. 
+Le fichier correction.txt est analysé ligne par ligne. Si un mot dans la phrase de l'utilisateur correspond à ce qui est marqué avant le signe égal, 
+il est remplacé par ce qui vient après.<br>
+Par exemple, la ligne "c'ets =c'est " transformera la phrase "c'ets certain" en "c'est certain".<br><br>
+Ce fichier est extrèmement pratique. On peut s'en servir pour corriger les fautes, mais aussi pour utiliser des synonymes ou changer les structures gramaticales.<br>
+Par exemple "c'est quoi ton=quel est ton", ou encore "on me nomme=je m'appelle".</div>
+
+<div style="padding-left:40%"><big><big>↓↓</big></big><br></div>
+
+<DIV style="padding:2;width:80%;border-width:thin;border-style:solid"><b>3) Le fichier AR.txt</b><br><br>
+Ce fichier est ce que j'appelle un cerveau. Il est divisé en deux parties, séparées par un signe égal (=). <b>Avant le signe égal, le morceau de phrase auquel le programme doit réagir.
+Après le signe égal, la réponse que le programme doit donner</b>.<br>
+Par exemple "bonjour=Salut mon ami !" signifie que si le programme reçoit "bonjour", il répondra "salut mon ami" et s'arrêtera.<br>
+C'est aussi simple que ça. Pas de guillemets, pas de balises, juste un signe égal à mettre et une ligne à sauter.<br>
+<br>Bien sûr, ce n'est pas non plus simpliste, on peut heureusement enregistrer des variables, ajouter des conditions, réutiliser des bouts de phrases etc.
+<br><br>
+Genesis utilise plusieurs cerveaux : AR.txt, insultee.txt (lorsqu'on l'insulte) et aidemod.txt (pour aider à la modifier). On peut imaginer des chatterbots changeant de cerveau selon la langue, l'âge ou le sexe de l'interlocuteur...
+<br>On peut changer de cerveau grâce à la fonction "chgcerva".
+</div>
+
+<div style="padding-left:40%"><big><big>↓↓</big></big><br></div>
+
+<DIV style="padding:2;width:80%;border-width:thin;border-style:solid"><b>4) Le fichier correctionbot.txt</b><br><br>
+Ce fichier <b>remplace les mots de la réponse du programme par ceux qui y sont définis</b>, exactement de la même façon que correction.txt. Il est necessaire pour utiliser certains caractères réservés à l'analyse de la phrase, aux fonctions, aux variables ou aux conditions.
+<br><br>Ce sont des caractères tels que "{" "~" "(*)" "[" ou "|", qu'on utilise de toute façon très rarement dans une conversation. Si vous avez néanmoins besoin que votre programme les utilise, tapez ce qui se trouve à gauche du signe égal, par exemple, "symbspejok" pour "(*)".
+<br>Vous pouvez également vous en servir pour remplacer autre chose, par exemple "botmaster" en votre pseudo, "lieuhab" en l'endroit où vous habitez ou encore "nomrobot" en le nom que vous désirez donner au robot. Ainsi, si vous décidez de changer le nom du robot rapidement, vous n'aurez plus qu'à modifier ce fichier.
+</div>
+<br><br>
+<hr>
+<A NAME="install"></A>
+<u><span style='font-size:24.0pt'>Installation</span></u><br>
+<br>
+<br>
+<DIV style="padding:2;width:50%;">
+<big>Requis :</big><br><br>
+<li><u>Le script php.</u></li>
+<DIV style="padding:2;padding-left:25;">
+La dernière version &agrave; lors de la rédaction de ce document est la <a href="http://s140685957.onlinehome.fr/bot/C23_ver2011_02_12.zip" target=blank>C23_ver2011_02_12.zip</a>. Une nouvelle version est peut être disponible sur <a href="http://chatterbots.fr/forum/viewtopic.php?id=2" target=blank>le forum</a>.
+<br>
+Inclut la pr&eacute;sente documentation, un chatterbot exemple d'une dizaine de ligne présentant les fonctions, l'intégralité de Genesis dans sa version du 12 février 2011.
+</div>
+<br>
+<li><u>Un environnement php (4 ou supérieur).</u></li>
+<DIV style="padding:2;padding-left:25;">
+Le fichier chatterbot23.php va traiter les différents éléments du chatterbot, mais il est nécessaire d'avoir un programme pour lire chatterbot23.php.
+<br><br>Vous devrez utiliser un serveur web supportant le php comme free par exemple -ou n'importe quel hébergeur payant.
+<br>Si vous souhaitez executer ce chatterbot chez vous sans passer par un site web (ce qui est très conseillé pour faire des tests et modifier le cerveau), installer sur votre ordinateur des programmes comme <a href="http://www.easyphp.org/">Easy Php</a> ou <a href="http://www.wampserver.com/">Wamp Server</a>.
+<br>Il n'y a pas besoin de base de donnée.
+</div></div>
+<br><br><br>
+<big>Installation du chatterbot :</big><br><br>
+Rien de particulier, dézippez le contenu de C23.zip sur votre serveur, puis lancez chatterbot23.php.
+<br><br>
+<DIV style="padding:2;width:50%;">
+Voilà un guide étape par étape avec Easyphp pour les grands débutants :<br>
+<li><a href="http://www.easyphp.org/download.php" target=blank>Téléchargez Easyphp et installez-le.</a></li>
+<br>
+<li>Naviguez dans le repertoire d'installation (c:\Program Files\EasyPHP\), puis, dans le repertoire "www", créez un repertoire "chatterbot" et copiez le contenu de C23.zip</li>
+<br>
+<li>Lancez Easy PHP. Une icone devrait s'afficher à coté de l'horloge. Faites un clic droit dessus, choisissez "web local". Cliquez sur le lien "chatterbot", puis sur "chatterbot23.php".</li>
+<br>
+</div>
+<DIV style="padding:2;width:50%;">
+Voilà un guide étape par étape avec Wampee pour les grands débutants :<br>
+<li><a href="http://www.wampserver.com/download.php" target=blank>Téléchargez Wampee.</a></li>
+<br>
+<li>Naviguez dans le repertoire d'installation (par exemple C:\Wampee-2.1-beta-2\), puis, dans le repertoire "www", créez un repertoire "chatterbot" et copiez le contenu de C23.zip</li>
+<br>
+<li>Lancez Wampee. Une icone devrait s'afficher à coté de l'horloge. Faites un clic dessus, choisissez "localhost". Cliquez sur le lien "chatterbot", puis sur "chatterbot23.php".</li>
+<br>
+</div>
+<DIV style="padding:2;padding-left:25;">
+</div>
+<hr>
+<A NAME="outils"></A>
+<u><span style='font-size:24.0pt'>Les outils de base</span></u><br><br>
+
+<DIV style="background-color:#E8E9FD;padding:2;width:80%;"><b><span style='font-size:14.0pt;color:#333399'>Le signe égal</b></span><br>
+= - Permet de séparer l'action à détecter de la réaction à utiliser.
+<br><br>Exemple :<br>
+<DIV style="background-color:#FFFFCC;padding:2;padding-right:15;width:80%;">
+j'ai faim=Tu n'as qu'à manger !
+</div>
+Si la phrase de l'utilisateur contient les caractères avant le signe égal, alors le programme renvoie la réponse située après le signe égal.<br>
+<br><small><font face="Courier new">Utilisateur : mais euh <b>j'ai faim</b> moi sérieux !<br>
+Bot : Tu n'as qu'à manger !<br>
+</font></small>
+</div>
+<br>
+<DIV style="background-color:#E8E9FD;padding:2;width:80%;"><b><span style='font-size:14.0pt;color:#333399'>Le jocker</b></span><br>
+(*) - Se substitut à n'importe quel morceau de phrase.
+<br><br>Exemple :<br>
+<DIV style="background-color:#FFFFCC;padding:2;padding-right:15;width:80%;">
+j'ai (*)faim=Tu n'as qu'à manger !
+</div>
+Si la phrase de l'utilisateur contient un morceau de ce qu'il y a avant le jocker, puis un morceaux de ce qu'il y a après le jocker, dans cet ordre, alors, la phrase est reconnue.<br>
+<br><small><font face="Courier new">Utilisateur : mais euh <b>j'ai</b> (très) <b>faim</b> moi sérieux !<br>
+Bot : Tu n'as qu'à manger !<br>
+</font></small>
+<br>Attention, ça marche aussi avec :
+<br><small><font face="Courier new">Utilisateur : Au fait, <b>j'ai</b> oublié mon chien. Il a <b>faim</b> je crois lol<br>
+Bot : Tu n'as qu'à manger !<br>
+</font></small>
+<br>
+C'est un excellent outil, mais à utiliser avec beaucoup de précaution. Il consomme également pas mal de ressources. Il est possible d'utiliser plusieurs jockers.
+</div>
+<br>
+<DIV style="background-color:#E8E9FD;padding:2;width:80%;"><b><span style='font-size:14.0pt;color:#333399'>La barre verticale AVANT le signe égal</b></span><br>
+| - Impose un début ou une fin à la phrase.
+<br><br>Exemple :<br>
+<DIV style="background-color:#FFFFCC;padding:2;padding-right:15;width:80%;">
+|moi=Arrête de tout ramener à toi !
+</div>
+Dans l'exemple ci dessus, on a mis ce que j'appelle une "limite de coté". Pour que la phrase soit reconnue,  il faut que l'utilisateur commence sa phrase par "moi".<br>
+<br><small><font face="Courier new">Utilisateur : moi !<br>
+Bot : Arrête de tout ramener à toi !<br>
+</font></small>
+<br>
+Il ne faut pas que la phrase déborde sur le coté :
+<br><small><font face="Courier new">Utilisateur : quel émoi<br>
+(Phrase non reconnue)<br>
+</font></small>
+<br>
+Utile pour détecter des débuts de phrases (par exemple "|ne me parle pas" empèche la détection de "je ne me parle pas") ou des mots courts (|clair|).
+</div>
+<br>
+<DIV style="background-color:#E8E9FD;padding:2;width:80%;"><b><span style='font-size:14.0pt;color:#333399'>La barre verticale APRES le signe égal</b></span><br>
+| - Propose différentes réponses. Une sera utilisée aléatoirement.
+<br><br>Exemple :<br>
+<DIV style="background-color:#FFFFCC;padding:2;padding-right:15;width:80%;">
+j'ai (*)faim=Tu n'as qu'à manger !|En tant que robot, je n'ai pas ce problème.|Les humains, toujours à se plaindre !
+</div>
+Ici, le programme répondra à "j'ai faim" soit "Tu n'as qu'à manger !", soit "En tant que robot, je n'ai pas ce problème." Je recommande au minimum 3 réponses différentes, mais ce n'est pas toujours facile d'en trouver.<br>
+</div>
+<br>
+<DIV style="background-color:#E8E9FD;padding:2;width:80%;"><b><span style='font-size:14.0pt;color:#333399'>Le tilde</b></span><br>
+~ - Pour chercher dans une liste de mots
+<br><br>Exemple :<br>
+<DIV style="background-color:#FFFFCC;padding:2;padding-right:15;width:80%;">
+~bonjour~=Bonjour !
+</div>
+Dans cet exemple, on cherche si la phrase donnée correspond à une liste de mots synonymes de bonjour (par exemple bonjour, bonsoir, salut, hello, coucou etc.).<br>
+Cette liste de mot est stockée dans le dossier "gen" et le fichier porte le nom indiqué entre les tildes (ici, par exemple "bonjour.txt"). Il est possible d'utiliser des limites de côté dans les fichiers gen, mais pas de jockers.
+<br>
+Attention, vous ne pouvez combiner les tildes avec les jockers ou d'autres tildes. Les combiner avec du texte brut ou des limites de côté est possible. Ex : "|j'aime dire ~bonjour~ aux gens." est correct.
+<br>
+Vous pouvez utiliser des "continuer" et des variables pour outre passer cette limitation mais notez que les tildes ne sont pas là pour remplacer le cerveau. Cet outil sert à la détections de plusieurs synonymes de manière ponctuelle. Utilisez correction.txt pour créer des synonymes de manière permanente.
+</div>
+
+<hr>
+<A NAME="logs"></A>
+<u><span style='font-size:24.0pt'>Logs, variables et conditions</span></u><br>
+<br>
+<h2>Les logs</h2>
+Lorsque j'ai commencé à créer le programme, je me suis dit que j'allais sauvegarder l'historique de conversation de l'utilisateur (ce qu'on appelle un log), et l'analyser pour savoir ce qui avait été dit par le bot ou non.
+Si la phrase était déjà en mémoire dans le log, le programme ne devait pas l'utiliser.
+<br>Bien sûr, le problème est qu'il y a une infinité de synonyme. Si le bot veut vérifier que "bonsoir" n'a pas été dit, il faut qu'il vérifie aussi "bonjour".
+<br><br>
+L'idée était alors de créer un log parallèle, un "log spécial", qui pourrait se présenter comme ça :<br>
+<small><font face="Courier new">Utilisateur : Salut !<br>
+Bot : [salutations][demande si santé est bonne]<br>
+Utilisateur : Oui, et tu t'appelles comment ?<br>
+Bot : [donne son nom]<br>
+Utilisateur : Ce nom de merde !<br>
+Bot : [Insultes]<br>
+etc.<br>
+</font></small>
+<br>
+Ainsi, le bot irait facilement vérifier qu'il n'a pas déjà utilisé une salutation, par exemple. D'où la création des "logs spéciaux".<br><br>
+<DIV style="background-color:#E8E9FD;padding:2;width:80%;"><b><span style='font-size:14.0pt;color:#333399'>Les logs spéciaux</b></span><br>
+Un log spécial est une chaine de caractère entourée de crochets qui synthétise une réponse du programme afin de ne pas réutiliser une réponse similaire. Les logs spéciaux peuvent s'ajouter indifféremment avant ou après le signe égal. Attention, il est possible d'utiliser plusieurs logs spéciaux à la fois après le signe égal, mais un seul avant (à corriger, mais rien d'urgent, perso je me contente de les mettre après si j'en ai plusieurs).
+<bR><br>
+Exemple avant :<br>
+<DIV style="background-color:#FFFFCC;padding:2;padding-right:15;width:80%;">
+bonsoir[salutations]=Salut toi !|Bonsoir, visiteur.|Yo man !
+</div>
+<br>Exemple après :<br>
+<DIV style="background-color:#FFFFCC;padding:2;padding-right:15;width:80%;">
+bonsoir=Salut toi ![salutations]|Bonsoir, visiteur.[salutations]|Yo man ![salutations rap]
+</div>
+</div>
+<br>
+<DIV style="background-color:#E8E9FD;padding:2;width:80%;"><b><span style='font-size:14.0pt;color:#333399'>Les logs temporaires spéciaux</b></span><br>
+Un log temporaire spécial est une chaine de caractère entourée de crochets et précédé de "temp:". Ils ne durent que le temps d'une action de l'utilisateur. Ils peuvent s'ajouter indifféremment avant ou après le signe égal. Attention, il est possible d'utiliser plusieurs logs temporaires à la fois après le signe égal, mais un seul avant (à corriger, mais rien d'urgent, perso je me contente de les mettre après si j'en ai plusieurs).
+<bR><br>
+<DIV style="background-color:#FFFFCC;padding:2;padding-right:15;width:80%;">
+j'ai faim[salutations]=Tu as mangé il y a longtemps ?[temp:mangé ya longtemps demandé]
+</div>
+L'utilisateur va répondre, puis ce log temporaire s'effacer. Ils servent typiquement à attendre une réponse ou rajouter une précision sur ce qui a été dit.
+</div>
+<br>
+Pour ce qui est des variables, voir la fonction "modvar", plus bas.
+<br>
+<H2>Les conditions</h2>
+Les conditions ressemblent aux logs, mais avec des accolades.
+<DIV style="background-color:#E8E9FD;padding:2;width:80%;"><b><span style='font-size:14.0pt;color:#333399'>Tester si un log existe</b></span><br>
+Il suffit de mettre le log à tester entre accolades au lieu de le mettre entre crochets.
+<bR><br>
+<DIV style="background-color:#FFFFCC;padding:2;padding-right:15;width:80%;">
+{salutations}bonjour=Tu m'as déjà dit bonjour !
+</div>
+C'est la même chose pour les logs temporaires, par exemple "{temp:mangé ya longtemps demandé}". Il est possible de combiner les conditions et des les utiliser n'importe où dans la ligne. Faites bien attention à ne pas confondre conditions et logs ! Un log est entre crochets, une condition entre accolade.<br>
+</div>
+<br>
+<DIV style="background-color:#E8E9FD;padding:2;width:80%;"><b><span style='font-size:14.0pt;color:#333399'>Tester si un log n'existe pas</b></span><br>
+Rajouter "nulle" devant le log à tester.
+<bR><br>
+<DIV style="background-color:#FFFFCC;padding:2;padding-right:15;width:80%;">
+{nulle salutations}bonjour=Tu ne m'as pas dit bonjour !
+</div>
+En pratique, ça sert rarement. Le cerveau est lu de haut en bas. Si le programme ne s'arrête pas sur {salutations}, c'est que le log n'existe pas, pas besoin de mettre un nulle.
+</div>
+<br>
+<DIV style="background-color:#E8E9FD;padding:2;width:80%;"><b><span style='font-size:14.0pt;color:#333399'>Tester l'heure</b></span><br>
+<bR><br>
+<DIV style="background-color:#FFFFCC;padding:2;padding-right:15;width:80%;">
+{heure 17-22}~bonjour~[salutations]=Hé, bonne soirée ?[temp:bonne soirée?]|Salut ! Tu passes une bonne soirée ?[temp:bonne soirée?]
+</div>
+Si il est 17, 18, 19, 20 ou 21 heure, la condition est juste. Notez que l'exemple utilise une condition, un log spécial, une réponse générique, un log temporaire...
+<br>Il n'y a encore rien de prévu pour la date.
+</div>
+<br>
+<h3>Tests de variables</H3>
+Privilégiez les logs spéciaux aux variables. La différence entre les deux, c'est que les variables peuvent contenir des informations données par l'utilisateur (rare) et être changées. Je m'en sert dans Genesis pour stocker le sujet en cours, l'état de santé de l'utilisateur ou des informations fournies comme le nom, le lieu où il vit, les derniers mots utilisés....
+<br>
+A noter que la variable "nom" est une variable spéciale (c'était autrefois la seule variable existante), utilisez plutôt "nom_user" ou quelque chose comme ça à la place.<br>
+<bR>
+<DIV style="background-color:#E8E9FD;padding:2;width:80%;"><b><span style='font-size:14.0pt;color:#333399'>Tester l'existence d'une variable</b></span><br>
+<bR><br>
+<DIV style="background-color:#FFFFCC;padding:2;padding-right:15;width:80%;">
+{var sujet}=Merci m'avoir parlé &lt;-var sujet-&gt;, je suis sûr que ça va m'aider à m'améliorer.
+</div>
+Si la variable "sujet" existe, la réponse "Merci m'avoir parlé &lt;-var sujet-&gt;, je suis sûr que ça va m'aider à m'améliorer" sera utilisée.<br>
+</div>
+<br>
+<DIV style="background-color:#E8E9FD;padding:2;width:80%;"><b><span style='font-size:14.0pt;color:#333399'>Tester l'INexistence d'une variable</b></span><br>
+<bR><br>
+<DIV style="background-color:#FFFFCC;padding:2;padding-right:15;width:80%;">
+{nulle var sujet}=On a parlé d'aucun sujet !
+</div>
+Si la variable "sujet" n'existe pas, la réponse "On a parlé d'aucun sujet !" sera utilisée.<br>
+</div>
+<br>
+<DIV style="background-color:#E8E9FD;padding:2;width:80%;"><b><span style='font-size:14.0pt;color:#333399'>Tester la valeur d'une variable</b></span><br>
+J'utilise ":&gt;" pour tester une variable, ce n'est pas une syntaxe très orthodoxe, elle a été choisie car elle est plus facile à tester dans le code php.
+<bR><br>
+<DIV style="background-color:#FFFFCC;padding:2;padding-right:15;width:80%;">
+{var sujet:&gt;des jeux vidéo}=J'adore les jeux vidéo, les mondes virtuels, tout ça !
+</div>
+Si la variable "sujet" contient "des jeux vidéos", la réponse renvoyée sera "J'adore les jeux vidéo, les mondes virtuels, tout ça !".<br>
+</div>
+
+<br>
+<DIV style="background-color:#E8E9FD;padding:2;width:80%;"><b><span style='font-size:14.0pt;color:#333399'>Réutiliser une variable</b></span><br>
+Pour réutiliser une variable, avant ou après le signe égal. Voir les fonctions.
+<bR><br>
+<DIV style="background-color:#FFFFCC;padding:2;padding-right:15;width:80%;">
+&lt;-var(lieuhabitation)-&gt;=Oui, c'est là où tu habites, &lt;-var(lieuhabitation)-&gt; !
+</div>
+Dans cet exemple, si l'action de l'utilisateur correspond au contenu de lieuhabitation, le programme répond "Oui, c'est là où tu habites" et affiche le contenu de lieuhabitation. <br>
+</div>
+
+<hr>
+<A NAME="fonc"></A>
+<u><span style='font-size:24.0pt'>Liste des fonctions</span></u><br>
+Dans l&#8217;ordre de lecture<br>
+(Avril 2010, complet)</p>
+
+ <div style="background-color:#E8E9FD;">
+
+  <b><span style='font-size:14.0pt;color:#333399'>noreut</span></b><br>
+
+  noreut &#8211; Emp&ecirc;che d&#8217;utiliser une seconde
+  fois la phrase de r&eacute;ponse.</p>
+  <table class=MsoNormalTable border=0 cellpadding=0 width=270
+   style='width:202.5pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;-noreut-&gt;</p>
+
+    </td>
+   </tr>
+  </table>
+  
+  La phrase de r&eacute;ponse compl&egrave;te et non
+  format&eacute;e (avec encore toutes les fonctions) ne sera plus jamais
+  r&eacute;utilis&eacute;e.</p>
+
+
+</div>
+
+
+
+ <div style="background-color:#E8E9FD;">
+
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>continuer</span></b><br>
+  continuer &#8211; Une fois l&#8217;analyse faite et la
+  r&eacute;ponse trouv&eacute;e, permet de poursuivre l&#8217;analyse.</p>
+
+  <table class=MsoNormalTable border=0 cellpadding=0 width=270
+   style='width:202.5pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;-continuer-&gt;</p>
+    </td>
+   </tr>
+  </table>
+  
+
+  Peut &ecirc;tre utilis&eacute; pour construire des phrases
+  avec diff&eacute;rents morceaux.</p>
+  </td>
+ </tr>
+</div>
+
+
+
+ <div style="background-color:#E8E9FD;">
+
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>ignorer</span></b><br>
+  ignorer &#8211; Permet de sauter la phrase trouv&eacute;e.</p>
+  <table class=MsoNormalTable border=0 cellpadding=0 width=270
+   style='width:202.5pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+
+    &lt;-ignorer-&gt;</p>
+    </td>
+   </tr>
+  </table>
+  
+  Permet de baisser la probabilit&eacute; d&#8217;une phrase
+  d&#8217;&ecirc;tre utilis&eacute;e. Il est possible de modifier les logs
+  sp&eacute;ciaux.</p>
+  </p>
+  </td>
+ </tr>
+</div>
+
+
+
+ <div style="background-color:#E8E9FD;">
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>(*)</span></b><br>
+  (*) &#8211; R&eacute;p&egrave;te le dernier jocker.</p>
+  <table class=MsoNormalTable border=0 cellpadding=0 width=270
+   style='width:202.5pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+
+    (*)</p>
+    </td>
+   </tr>
+  </table>
+  
+  R&eacute;p&egrave;te le jocker de la phrase
+  analys&eacute;e en cours.</p>
+
+  </td>
+ </tr>
+</div>
+
+
+
+ <div style="background-color:#E8E9FD;">
+
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>(*X)</span></b><br>
+  (*X) &#8211; R&eacute;p&egrave;te le jocker num&eacute;ro
+  X.</p>
+
+  <table class=MsoNormalTable border=0 cellpadding=0 width=270
+   style='width:202.5pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    (*<i>nombre</i>)</p>
+    </td>
+   </tr>
+  </table>
+
+  
+  Il est possible de traiter jusqu&#8217;&agrave; 20
+  jockers.</p>
+  </td>
+ </tr>
+</div>
+
+
+
+ <div style="background-color:#E8E9FD;">
+
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>modvar</span></b><br>
+  modvar - Modifie une variable. </p>
+  <table class=MsoNormalTable border=0 cellpadding=0 width=270
+   style='width:202.5pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;-modvar(<i>nom de la variable</i>,<i>valeur</i>)-&gt;</p>
+
+    </td>
+   </tr>
+  </table>
+  
+  Modifie une variable. Si celle-ci n&#8217;existe pas, elle
+  sera cr&eacute;&eacute;e.</p>
+  </td>
+ </tr>
+
+</div>
+
+
+
+ <div style="background-color:#E8E9FD;">
+
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>chgcerva</span><br></b></p>
+  chgcerva &#8211; Change le cerveau du bot</p>
+
+  <table class=MsoNormalTable border=0 cellpadding=0 width=270
+   style='width:202.5pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;chgcerva:<i>nom du fichier du cerveau</i>&gt;<span
+    style='mso-bidi-font-size:10.0pt'></span><br>
+    </td>
+   </tr>
+  </table>
+  
+
+  A modifier en &lt;-chgcerva(<i>nom</i>)-&gt;</p>
+  </td>
+ </tr>
+</div>
+
+
+
+ <div style="background-color:#E8E9FD;">
+
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>heure</span></b><br>
+  heure - Affiche l'heure. </p>
+  <table class=MsoNormalTable border=0 cellpadding=0 width=387
+   style='width:290.25pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;-heure-&gt;</p>
+
+    </td>
+   </tr>
+  </table>
+  
+  H&nbsp;:i</p>
+  </td>
+ </tr>
+</div>
+
+
+
+ <div style="background-color:#E8E9FD;">
+
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>Date</span></b><br>
+  date - Affiche la date. </p>
+  <table class=MsoNormalTable border=0 cellpadding=0 width=387
+   style='width:290.25pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;-date-&gt;</p>
+    </td>
+   </tr>
+  </table>
+  
+  d/n/Y<span style='mso-bidi-font-size:10.0pt'></span><br>
+  </td>
+
+ </tr>
+</div>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'></p>
+
+ <div style="background-color:#E8E9FD;">
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>url</span></b><br>
+  url&nbsp;-&nbsp;Cr&eacute;&eacute; un lien. </p>
+
+  <table class=MsoNormalTable border=0 cellpadding=0 width=270
+   style='width:202.5pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;-url(<i>intitul&eacute; de l'url</i>,<i>url</i>-&gt;</p>
+    </td>
+
+   </tr>
+  </table>
+  </p>
+  </td>
+ </tr>
+</div>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'></p>
+
+ <div style="background-color:#E8E9FD;">
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>clicrep</span></b><br>
+  clicrep&nbsp;-&nbsp;Cr&eacute;&eacute; un lien cliquable
+  envoyant une r&eacute;ponse. </p>
+  <table class=MsoNormalTable border=0 cellpadding=0 width=387
+   style='width:290.25pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;-clicrep(<i>partie &agrave; rendre cliquable</i>,<i>r&eacute;ponse &agrave; envoyer</i>-&gt;</p>
+    </td>
+   </tr>
+
+  </table>
+  <br>
+  Simule une r&eacute;ponse de l'utilisateur avec une fonction javascript.</p>
+  </td>
+ </tr>
+</div>
+
+
+
+ <div style="background-color:#E8E9FD;">
+
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>rappel</span></b><br>
+  rappel - Alerte l'utilisateur avec un fichier sonore au
+  bout de X minutes.</p>
+  <table class=MsoNormalTable border=0 cellpadding=0 width=387
+   style='width:290.25pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;-rappel(<i>nombre de minutes,chose &agrave; rappeler</i>)-&gt;</p>
+
+    </td>
+   </tr>
+  </table>
+  <br>
+  Ajoute une variable correspondant &agrave; l'heure du rappel dans la variable
+  de session rappel.<br>
+  A chaque chargement de la page, v&eacute;rifie si l'heure correspond, et
+  d&eacute;clenche alarme.wav le cas &eacute;chant, tout en &nbsp;envoyant
+  &quot;rappel&quot; au cerveau autoresfresh. Fonction expérimentale.</p>
+
+  Note&nbsp;: un seul rappel par phrase. Utiliser des
+  continuer si vous avez vraiment besoin de plusieurs rappels.</p>
+  </td>
+ </tr>
+</div>
+
+
+
+ <div style="background-color:#E8E9FD;">
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+
+  <b><span style='font-size:14.0pt;color:#333399'>?rappel</span></b><br>
+  ?rappel &#8211; V&eacute;rifie s&#8217;il existe un rappel</p>
+  <table class=MsoNormalTable border=0 cellpadding=0 width=387
+   style='width:290.25pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;-?rappel-&gt;<span style='mso-bidi-font-size:10.0pt'></span><br>
+
+    </td>
+   </tr>
+  </table>
+  <br>
+  Utilis&eacute; pour les cas o&ugrave; l&#8217;utilisateur demande &laquo;&nbsp;tu
+  dois me rappeler de quelque chose bient&ocirc;t&nbsp;?&nbsp;&raquo;. Fonction expérimentale.</p>
+
+  </td>
+ </tr>
+</div>
+
+ <div style="background-color:#E8E9FD;">
+
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+
+  <b><span style='font-size:14.0pt;color:#333399'>var</span></b><br>
+  Var - Affiche le contenu d'une variable</p>
+  <table class=MsoNormalTable border=0 cellpadding=0 width=387
+   style='width:290.25pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;-var(<i>nom de la variable à afficher</i>)-&gt;<span style='mso-bidi-font-size:10.0pt'></span><br>
+
+    </td>
+   </tr>
+  </table>
+  <br>
+Marche avant et apr&egrave;s le signe &eacute;gal.</p>
+
+  </td>
+ </tr>
+</div>
+
+ <div style="background-color:#E8E9FD;">
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>compter</span></b><br>
+  compter &#8211; calcule la formule donn&eacute;e.</p>
+
+  <table class=MsoNormalTable border=0 cellpadding=0 width=387
+   style='width:290.25pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;-compter(<i>formule &agrave; compter</i>)-&gt;</p>
+    </td>
+   </tr>
+
+  </table>
+  <br>
+  Cette fonction change la phrase de l&#8217;utilisateur en &laquo;&nbsp;errcalc&nbsp;&raquo;
+  si le calcul ne peut pas &ecirc;tre r&eacute;solu.<span style='mso-bidi-font-size:
+  10.0pt'></span><br>
+  </td>
+ </tr>
+
+</div>
+<br>
+ <div style="background-color:#E8E9FD;">
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>inc</span></b><br>
+  inc &#8211; appelle un script externe.</p>
+
+  <table class=MsoNormalTable border=0 cellpadding=0 width=387
+   style='width:290.25pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;-inc(<i>nom du script[,param&egrave;tre1,param&egrave;tre 2...]</i>)-&gt;</p>
+    </td>
+   </tr>
+
+  </table>
+  <br>
+	Permet d'étendre considérablement les possibilités du chatterbot sans avoir à modifier le script principal. Voir la fonction exemple titrejournal.php ou pif.php.<span style='mso-bidi-font-size:
+  10.0pt'></span><br>
+  </td>
+ </tr>
+
+</div>
+
+<u><span style='font-size:24.0pt'>Fonction obsol&egrave;tes&nbsp;:</span><br></u></p>
+
+Les fonctions &eacute;taient autrefois appel&eacute;es d&#8217;une
+mani&egrave;re diff&eacute;rente. Il est toujours possible d&#8217;utiliser les
+vieille m&eacute;thodes, afin de garder la compatibilit&eacute; avec les
+cerveaux les plus anciens.</p>
+
+
+
+ <div style="background-color:#E8E9FD;">
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>modvar
+  (obsol&egrave;te)</span></b><span style='font-size:14.0pt;color:#333399'></span><br>
+  modvar - modifie une variable </p>
+  <table class=MsoNormalTable border=0 cellpadding=0 width=387
+   style='width:290.25pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    -&gt;modvar <i>nom de la variable</i>:&gt;<i>valeur</i>&lt;-</p>
+    </td>
+   </tr>
+  </table>
+
+  <br>
+  Conserv&eacute; pour garder la compatiilit&eacute; avec les cerveaux plus
+  anciens.<br>
+  Utiliser d&eacute;sormais &lt;-modvar(<i>nom de la variable</i>, <i>valeur</i>)-&gt;
+
+  </p>
+  </td>
+ </tr>
+</div>
+
+<p class=MsoNormal style='margin-bottom:12.0pt'></p>
+
+ <div style="background-color:#E8E9FD;">
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>savvar nom
+  (obsol&egrave;te)</span></b><span style='font-size:14.0pt;color:#333399'></span><br>
+
+  nom &#8211; retiens le nom</p>
+  <table class=MsoNormalTable border=0 cellpadding=0 width=387
+   style='width:290.25pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    -&gt;savvar nom&lt;-<span style='mso-bidi-font-size:
+    10.0pt'></span><br>
+    </td>
+
+   </tr>
+  </table>
+  <br>
+  Le dernier jocker est sauv&eacute; dans la variable nom.</p>
+  Utiliser d&eacute;sormais &lt;-modvar(<i>nom de la
+  variable</i>, <i>valeur</i>)-&gt;</p>
+
+  </td>
+ </tr>
+</div>
+
+
+
+ <div style="background-color:#E8E9FD;">
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>nom (obsol&egrave;te)</span></b><br>
+
+  nom &#8211; Affiche le nom</p>
+  <table class=MsoNormalTable border=0 cellpadding=0 width=270
+   style='width:202.5pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;-nom-&gt;</p>
+    </td>
+   </tr>
+
+  </table>
+  Utiliser d&eacute;sormais &lt;-var <i>nom de la variable</i>-&gt;</p>
+  </td>
+ </tr>
+</div>
+
+ <div style="background-color:#E8E9FD;">
+
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>ignorer (obsol&egrave;te)</span></b><br>
+</p>
+  <table class=MsoNormalTable border=0 cellpadding=0 width=270
+   style='width:202.5pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;IGNORER&gt;</p>
+    </td>
+   </tr>
+
+  </table>
+  Utiliser d&eacute;sormais &lt;-ignorer-&gt;</p>
+  </td>
+ </tr>
+</div>
+
+ <div style="background-color:#E8E9FD;">
+
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>NOREUT (obsol&egrave;te)</span></b><br>
+</p>
+  <table class=MsoNormalTable border=0 cellpadding=0 width=270
+   style='width:202.5pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;NOREUT&gt;</p>
+    </td>
+   </tr>
+
+  </table>
+  Utiliser d&eacute;sormais &lt;-noreut-&gt;</p>
+  </td>
+ </tr>
+</div>
+
+ <div style="background-color:#E8E9FD;">
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+  <td style='padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+  <b><span style='font-size:14.0pt;color:#333399'>var (obsol&egrave;te)</span></b><br>
+</p>
+  <table class=MsoNormalTable border=0 cellpadding=0 width=270
+   style='width:202.5pt;mso-cellspacing:1.5pt;mso-padding-alt:1.5pt 1.5pt 1.5pt 1.5pt'>
+   <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
+    <td style='background:#FFFFCC;padding:1.5pt 1.5pt 1.5pt 1.5pt'>
+    &lt;-var <i>nom de la variable</i>&gt;</p>
+    </td>
+   </tr>
+
+  </table>
+  Utiliser d&eacute;sormais &lt;-var(<i>nom de la variable</i>)-&gt;</p>
+  </td>
+ </tr>
+</div>

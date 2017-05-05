@@ -1,0 +1,68 @@
+/*.navbar,.active,li{
+background-color: #FF0000;
+
+}
+.navbar-default .navbar-nav > .active > a {
+
+
+background-color: #FF0000;
+}
+*/
+
+/*label.error {
+    color:#FF0000;
+}*/
+
+
+#drag{
+border-radius: 25px;
+border: 2px dashed blue;
+height: 300px;
+
+}
+
+.none{
+    display:none;
+}
+
+#hidden{
+ visibility:hidden
+}
+
+/* Set the fixed height of the footer here */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+
+  background-color: #286F76;
+}
+
+form{
+    margin-top:12px;
+}
+
+
+.unread {
+    color: #00FF00;
+}
+
+a .read:visited {
+    color: #0000EE;
+    text-decoration: none;
+}
+
+a .unread:visited {
+    color: #0000EE;
+    text-decoration: none;
+}
